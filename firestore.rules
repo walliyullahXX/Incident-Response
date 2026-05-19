@@ -1,0 +1,83 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // --- HELPERS ---
+    
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+    
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+    
+    function incoming() {
+      return request.resource.data;
+    }
+    
+    function existing() {
+      return resource.data;
+    }
+
+    // --- VALIDATION HELPERS ---
+
+    function isValidUser(data) {
+      return data.keys().hasAll(['uid', 'name', 'email', 'createdAt']) &&
+             data.keys().size() == 4 &&
+             data.uid == request.auth.uid &&
+             data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
+             data.email is string && data.email.size() <= 255 &&
+             data.createdAt == request.time;
+    }
+
+    function isValidIncident(data) {
+      return data.keys().hasAll(['title', 'description', 'category', 'lat', 'lng', 'address', 'imageUrl', 'userId', 'userName', 'createdAt', 'updatedAt']) &&
+             data.keys().size() == 11 &&
+             data.title is string && data.title.size() >= 3 && data.title.size() <= 100 &&
+             data.description is string && data.description.size() >= 10 && data.description.size() <= 2000 &&
+             data.category in ['Accident', 'Fighting', 'Rioting', 'Traffic', 'Other'] &&
+             data.lat is number && data.lng is number &&
+             data.address is string && data.address.size() <= 500 &&
+             data.imageUrl is string && data.imageUrl.size() <= 1000 &&
+             data.userId == request.auth.uid &&
+             data.userName is string && data.userName.size() <= 100 &&
+             data.createdAt == (resource == null ? request.time : resource.data.createdAt) &&
+             data.updatedAt == request.time;
+    }
+
+    // --- GLOBAL DENY ---
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- COLLECTIONS ---
+
+    match /users/{userId} {
+      allow get: if isSignedIn();
+      allow create: if isOwner(userId) && isValidUser(incoming());
+      allow update: if isOwner(userId) && 
+                      incoming().uid == existing().uid &&
+                      incoming().createdAt == existing().createdAt &&
+                      incoming().diff(existing()).affectedKeys().hasOnly(['name', 'email']) &&
+                      isValidUser(incoming());
+    }
+
+    match /incidents/{incidentId} {
+      allow list: if isSignedIn();
+      allow get: if isSignedIn();
+      allow create: if isSignedIn() && isValidIncident(incoming());
+      allow update: if isOwner(existing().userId) && 
+                      incoming().userId == existing().userId &&
+                      incoming().createdAt == existing().createdAt &&
+                      incoming().diff(existing()).affectedKeys().hasOnly(['title', 'description', 'category', 'updatedAt']) &&
+                      isValidIncident(incoming());
+      allow delete: if isOwner(existing().userId);
+    }
+  }
+}

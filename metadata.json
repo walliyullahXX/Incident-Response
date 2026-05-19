@@ -1,0 +1,6 @@
+{
+  "name": "CitizenReport",
+  "description": "A real-time platform for citizens to report incidents like accidents, riots, and traffic with geolocation and photos.",
+  "requestFramePermissions": ["camera", "geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
