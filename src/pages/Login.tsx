@@ -39,7 +39,7 @@ export default function Login() {
             <ShieldAlert className="text-brand-accent w-10 h-10" />
           </div>
           <h1 className="text-3xl font-light text-slate-100 italic">Welcome <span className="font-bold text-brand-accent">Back</span></h1>
-          <p className="text-sm text-slate-500 uppercase tracking-widest mt-2 font-bold font-mono">Responder Login</p>
+          <p className="text-sm text-slate-500 uppercase tracking-widest mt-2 font-bold font-mono">User Login</p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-6">
@@ -59,7 +59,7 @@ export default function Login() {
           </div>
 
           <div>
-            <label className="label-caps">Security Phrase</label>
+            <label className="label-caps">User Password</label>
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
               <input 
@@ -84,14 +84,14 @@ export default function Login() {
             disabled={loading}
             className="btn-primary flex items-center justify-center gap-2"
           >
-            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Authenticate'}
+            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Login'}
           </button>
         </form>
 
         <p className="mt-8 text-center text-sm text-slate-500">
           New to the network?{' '}
           <Link to="/register" className="text-brand-accent hover:underline decoration-brand-accent/30 underline-offset-4">
-            Initialize Account
+            Register Account
           </Link>
         </p>
       </motion.div>

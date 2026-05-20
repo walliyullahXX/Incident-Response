@@ -164,7 +164,7 @@ export default function Dashboard() {
                 className="btn-secondary"
               >
                 {locating ? <Loader2 className="w-4 h-4 animate-spin" /> : <MapPin className="w-4 h-4" />}
-                Pin Location
+                Get Location
               </button>
               <button 
                 type="button" 

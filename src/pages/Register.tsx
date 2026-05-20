@@ -63,12 +63,12 @@ export default function Register() {
             <ShieldAlert className="text-brand-accent w-10 h-10" />
           </div>
           <h1 className="text-3xl font-light text-slate-100 italic uppercase tracking-tighter">Join the <span className="font-bold text-brand-accent">Network</span></h1>
-          <p className="text-sm text-slate-500 uppercase tracking-widest mt-2 font-bold font-mono text-center">New Sentinel Registration</p>
+          <p className="text-sm text-slate-500 uppercase tracking-widest mt-2 font-bold font-mono text-center">New User Registration</p>
         </div>
 
         <form onSubmit={handleRegister} className="space-y-6">
           <div>
-            <label className="label-caps">Sentinel Name</label>
+            <label className="label-caps">User Name</label>
             <div className="relative">
               <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
               <input 
@@ -83,7 +83,7 @@ export default function Register() {
           </div>
 
           <div>
-            <label className="label-caps">Network Link (Email)</label>
+            <label className="label-caps">User Email (Email)</label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
               <input 
@@ -98,7 +98,7 @@ export default function Register() {
           </div>
 
           <div>
-            <label className="label-caps">Access Code (Password)</label>
+            <label className="label-caps">User Password (Password)</label>
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
               <input 
@@ -124,14 +124,14 @@ export default function Register() {
             disabled={loading}
             className="btn-primary flex items-center justify-center gap-2"
           >
-            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Register Sentinel'}
+            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Register User'}
           </button>
         </form>
 
         <p className="mt-8 text-center text-sm text-slate-500">
           Already verified?{' '}
           <Link to="/login" className="text-brand-accent hover:underline decoration-brand-accent/30 underline-offset-4">
-            Network Login
+            Login here
           </Link>
         </p>
       </motion.div>
