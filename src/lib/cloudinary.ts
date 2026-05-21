@@ -3,8 +3,13 @@ const UPLOAD_PRESET = process.env.CLOUDINARY_UPLOAD_PRESET;
 
 export async function uploadImage(file: File | Blob): Promise<string> {
   if (!CLOUD_NAME || !UPLOAD_PRESET) {
-    console.warn("Cloudinary not configured. Using placeholder.");
-    return "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&q=80&w=1000";
+    console.warn("Cloudinary not configured. Falling back to local data URL (Base64).");
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
   }
 
   const formData = new FormData();
